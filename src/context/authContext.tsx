@@ -1,9 +1,15 @@
 import { useContext, createContext, ReactNode } from "react";
+import { useState } from "react";
 interface Props {
   children: ReactNode;
 }
 const AuthContext = createContext({});
 export const useAuth = () => useContext(AuthContext);
 export const AuthContextProvider = ({ children }: Props) => {
-  return <AuthContext.Provider>{children}</AuthContext.Provider>;
+  const [formValues, setFormValues] = useState({});
+  return (
+    <AuthContext.Provider value={{ formValues }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
