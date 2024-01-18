@@ -2,9 +2,12 @@
 import { useState } from "react";
 import RegisterForm from "./_components/register";
 import LoginForm from "./_components/login";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
   const [openTab, setOpenTab] = useState(1);
+  const pathname = usePathname();
   return (
     <main>
       <div className="block bg-hero-pattern bg-right-bottom bg-cover bg-no-repeat py-14 px-10 xs:p-6">
@@ -21,10 +24,10 @@ export default function Home() {
                   }
                   onClick={() => setOpenTab(1)}
                 >
-                  SIgn up
+                  {pathname === "/" ? "Sign up" : "Sign in"}
                 </button>
               </li>
-              <li className="mr-2">
+              {/* <li className="mr-2">
                 <button
                   className={
                     openTab === 2
@@ -33,15 +36,15 @@ export default function Home() {
                   }
                   onClick={() => setOpenTab(2)}
                 >
-                  Sign In
+                  <Link href={"/login"}> Sign in</Link>
                 </button>
-              </li>
+              </li> */}
             </ul>
           </div>
           {/* Tabs end */}
 
           <div className="w-full px-8 justify-center pb-12 pt-4  bg-light-one dark:bg-dark-two">
-            {openTab === 1 ? <RegisterForm /> : <LoginForm />}
+            {pathname === "/" ? <RegisterForm /> : <LoginForm />}
           </div>
         </div>
       </div>

@@ -5,18 +5,18 @@ import React from "react";
 import Label from "./label";
 import Input from "./input";
 import Button from "./button";
+
+import { useRouter } from "next/navigation";
+
+import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 
 export default function RegisterForm() {
-  const [formValues, setFormValues] = useState({
-    name: "",
-    password: "",
-    email: "",
-    confirmPassword: "",
-  });
+  const { formValues, setFormValues } = useAuth();
   const [visible, setVisible] = useState(false);
   const { name, password, confirmPassword, email } = formValues;
   const [error, setError] = useState("");
+  const router = useRouter();
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormValues((prevFormValues) => ({
@@ -39,7 +39,9 @@ export default function RegisterForm() {
       setError("Passwords do not match");
       return;
     }
+    router.push("/");
   };
+  console.log({ formValues });
   return (
     <div>
       <form onSubmit={handleSubmit} className="w-full">
@@ -96,6 +98,11 @@ export default function RegisterForm() {
         </div>
         <div className="my-4">
           <Button type="submit">Create account</Button>
+        </div>
+        <div className="my-4">
+          <span>
+            Have an account ? <Link href="/login">Sign in</Link>
+          </span>
         </div>
       </form>
     </div>
