@@ -4,7 +4,9 @@ import RegisterForm from "../_components/register";
 const MainHomePage = () => {
   return (
     <div className="relative flex min-h-screen flex-col">
-      <Home label="Sign up" children={<RegisterForm />} />
+      <Home label="Sign up">
+        <RegisterForm />
+      </Home>
     </div>
   );
 };
