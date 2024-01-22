@@ -2,6 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthContextProvider } from "@/context/authContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Navbar from "./_components/navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +20,11 @@ export default function RootLayout({
   return (
     <AuthContextProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <Navbar />
+          {children}
+          <ToastContainer />
+        </body>
       </html>
     </AuthContextProvider>
   );

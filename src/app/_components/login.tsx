@@ -4,20 +4,49 @@ import Label from "./label";
 import Input from "./input";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import Button from "./button";
-
+import Link from "next/link";
+import { useAuth } from "@/context/authContext";
+import { useRouter } from "next/navigation";
 export default function LoginForm() {
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
   const [visible, setVisible] = useState(false);
+  const { users } = useAuth();
   const { email, password } = formValues;
-  const handleSubmit = () => {};
-  const handleInputChange = () => {};
-  const handleVisible = () => {};
+  const router = useRouter();
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormValues((prevFormValues) => ({
+      ...prevFormValues,
+      [name]: value,
+    }));
+    setError("");
+  };
+  const handleVisible = () => {
+    setVisible((prev) => !prev);
+  };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!email || !password) {
+      setError("Please provide all details");
+      return;
+    }
+    const userExist = users.find((user) => user.email === formValues.email);
+    if (userExist) {
+      router.push("/dashboard");
+    } else {
+      setError("User does not exist");
+      return;
+    }
+  };
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className="my-4">
+    <form onSubmit={handleSubmit} className="w-full space-y-4">
+      {error && <p>{error}</p>}
+      <div>
         <Label>Email</Label>
         <Input
           placeholder="johndoe@gmail.com"
@@ -27,7 +56,7 @@ export default function LoginForm() {
           value={email || ""}
         />
       </div>
-      <div className="my-4">
+      <div>
         <Label>Password</Label>
         <div className="relative">
           <Input
@@ -43,8 +72,16 @@ export default function LoginForm() {
         {/* <p className="text-red-500">{formErrors.password}</p> */}
       </div>
 
-      <div className="my-4">
+      <div>
         <Button type="submit">Log in</Button>
+      </div>
+      <div>
+        <span className="block mb-2 text-base font-medium text-gray-900 dark:text-white">
+          Don't have an account?{" "}
+          <Link href="/" className="text-primary">
+            Sign up
+          </Link>
+        </span>
       </div>
     </form>
   );
