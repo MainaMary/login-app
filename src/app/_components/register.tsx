@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { AiFillEyeInvisible, AiFillEye } from "react-icons/ai";
 import React from "react";
 import Label from "./label";
@@ -12,7 +13,7 @@ import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 
 export default function RegisterForm() {
-  const { formValues, setFormValues } = useAuth();
+  const { formValues, setFormValues, setUsers, users } = useAuth();
   const [visible, setVisible] = useState(false);
   const { name, password, confirmPassword, email } = formValues;
   const [error, setError] = useState("");
@@ -39,14 +40,26 @@ export default function RegisterForm() {
       setError("Passwords do not match");
       return;
     }
-    router.push("/");
+    const userExist = users.find((user) => user.email === formValues.email);
+    if (userExist) {
+      setError("User already exist");
+      return;
+    }
+    const newUser = {
+      name: formValues.name,
+      email: formValues.email,
+    };
+    setUsers((prevUsers: any) => [...prevUsers, newUser]);
+    toast.success("Account cretaed successfully");
+    // router.push("/");
+    setFormValues({ name: "", password: "", email: "", confirmPassword: "" });
   };
-  console.log({ formValues });
+
   return (
     <div>
-      <form onSubmit={handleSubmit} className="w-full">
+      <form onSubmit={handleSubmit} className="w-full space-y-4">
         {error && <p className="text-red-400 text-base">{error}</p>}
-        <div className="my-4">
+        <div>
           <Label>Name</Label>
           <Input
             placeholder="John Doe"
@@ -56,7 +69,7 @@ export default function RegisterForm() {
             value={name || ""}
           />
         </div>
-        <div className="my-4">
+        <div>
           <Label>Email</Label>
           <Input
             placeholder="johndoe@gmail.com"
@@ -66,7 +79,7 @@ export default function RegisterForm() {
             value={email || ""}
           />
         </div>
-        <div className="my-4">
+        <div>
           <Label>Password</Label>
           <div className="relative">
             <Input
@@ -81,7 +94,7 @@ export default function RegisterForm() {
           </div>
           {/* <p className="text-red-500">{formErrors.password}</p> */}
         </div>
-        <div className="my-4">
+        <div>
           <Label>Confirm Password</Label>
           <div className="relative">
             <Input
@@ -96,12 +109,15 @@ export default function RegisterForm() {
           </div>
           {/* <p className="text-red-500">{formErrors.password}</p> */}
         </div>
-        <div className="my-4">
+        <div>
           <Button type="submit">Create account</Button>
         </div>
-        <div className="my-4">
-          <span>
-            Have an account ? <Link href="/login">Sign in</Link>
+        <div>
+          <span className="block mb-2 text-base font-medium text-gray-900 dark:text-white">
+            Have an account?{" "}
+            <Link href="/login" className="text-primary">
+              Sign in
+            </Link>
           </span>
         </div>
       </form>
