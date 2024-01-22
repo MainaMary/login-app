@@ -36,18 +36,22 @@ export default function LoginForm() {
       setError("Please provide all details");
       return;
     }
-    toast.success("User logged in succesfully");
+
     const userExist = users.find((user) => user.email === formValues.email);
-    if (userExist) {
+    if (userExist?.email === email && userExist.password === password) {
+      toast.success("User logged in succesfully");
       router.push("/dashboard");
-    } else {
+    } else if (userExist?.email !== email) {
       setError("User does not exist");
       return;
+    }
+    if (userExist && userExist.password !== password) {
+      setError("Wrong password");
     }
   };
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-4">
-      {error && <p>{error}</p>}
+      {error && <p className="text-red-500 text-base">{error}</p>}
       <div>
         <Label>Email</Label>
         <Input

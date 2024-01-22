@@ -48,6 +48,7 @@ export default function RegisterForm() {
     const newUser = {
       name: formValues.name,
       email: formValues.email,
+      password: formValues.password,
     };
     setUsers((prevUsers: any) => [...prevUsers, newUser]);
     toast.success("Account cretaed successfully");
