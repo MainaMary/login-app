@@ -1,12 +1,14 @@
 "use client";
 import {
   useContext,
+  useState,
+  useEffect,
   createContext,
   ReactNode,
   Dispatch,
   SetStateAction,
 } from "react";
-import { useState } from "react";
+
 interface Props {
   children: ReactNode;
 }
@@ -25,6 +27,8 @@ interface AuthContextProps {
       confirmPassword: string;
     }>
   >;
+  users: { name: string; password: string; email: string }[];
+  setUsers: any;
 }
 const defaultValue: AuthContextProps = {
   formValues: {
@@ -33,6 +37,8 @@ const defaultValue: AuthContextProps = {
     email: "",
     confirmPassword: "",
   },
+  users: [],
+  setUsers: () => {},
   setFormValues: () => {},
 };
 const AuthContext = createContext<AuthContextProps>(defaultValue);
@@ -45,8 +51,19 @@ export const AuthContextProvider = ({ children }: Props) => {
     email: "",
     confirmPassword: "",
   });
+  const initialState = localStorage.getItem("users")
+    ? JSON.parse(localStorage.getItem("users") || "")
+    : [];
+  const [users, setUsers] =
+    useState<{ name: ""; password: ""; email: "" }[]>(initialState);
+
+  useEffect(() => {
+    localStorage.setItem("users", JSON.stringify(users));
+  }, [users]);
   return (
-    <AuthContext.Provider value={{ formValues, setFormValues }}>
+    <AuthContext.Provider
+      value={{ users, setUsers, formValues, setFormValues }}
+    >
       {children}
     </AuthContext.Provider>
   );
