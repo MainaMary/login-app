@@ -51,7 +51,7 @@ export default function RegisterForm() {
     };
     setUsers((prevUsers: any) => [...prevUsers, newUser]);
     toast.success("Account cretaed successfully");
-    // router.push("/");
+    router.push("/login");
     setFormValues({ name: "", password: "", email: "", confirmPassword: "" });
   };
 

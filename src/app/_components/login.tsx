@@ -7,6 +7,7 @@ import Button from "./button";
 import Link from "next/link";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 export default function LoginForm() {
   const [formValues, setFormValues] = useState({
     email: "",
@@ -35,6 +36,7 @@ export default function LoginForm() {
       setError("Please provide all details");
       return;
     }
+    toast.success("User logged in succesfully");
     const userExist = users.find((user) => user.email === formValues.email);
     if (userExist) {
       router.push("/dashboard");

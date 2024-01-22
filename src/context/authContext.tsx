@@ -8,7 +8,6 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-
 interface Props {
   children: ReactNode;
 }
